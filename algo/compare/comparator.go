@@ -1,7 +1,6 @@
-package algo
+package compare
 
 import (
-	"fmt"
 	"reflect"
 )
 
@@ -11,6 +10,16 @@ type ISortable interface {
 	Len() int
 	Swap(a int, b int)
 }
+
+// CompareFunc implemented objects can be compared.
+type CompareFunc func(a interface{}, b interface{}) int
+
+// Define some const
+const (
+	Equal   = 0
+	Less    = -1
+	Greater = 1
+)
 
 // IntComparator is used for any []int sort.
 type IntComparator struct {
@@ -35,10 +44,11 @@ type SimpleTypeComparator struct {
 	Asc  bool
 }
 
-func (cmp *SimpleTypeComparator) Cmp(a int, b int) bool {
-	a1 := cmp.Data[a]
-	b1 := cmp.Data[b]
-
+// BasicCompare compares any basic type.
+var BasicCompare = func(a1 interface{}, b1 interface{}) int {
+	if a1 == b1 {
+		return Equal
+	}
 	kind := reflect.ValueOf(a1).Type().Kind()
 	// === TEMPLATE ===
 	// case reflect.Int: if (cmp.Asc) {; return a1.(int) < b1.(int) ;}; return a1.(int) > b1.(int)
@@ -56,74 +66,80 @@ func (cmp *SimpleTypeComparator) Cmp(a int, b int) bool {
 	// case reflect.Float64: if (cmp.Asc) {; return a1.(float64) < b1.(float64) ;}; return a1.(float64) > b1.(float64)
 	switch kind {
 	case reflect.Int:
-		if cmp.Asc {
-			return a1.(int) < b1.(int)
+		if a1.(int) < b1.(int) {
+			return Less
 		}
-		return a1.(int) > b1.(int)
+		return Greater
 	case reflect.Int8:
-		if cmp.Asc {
-			return a1.(int8) < b1.(int8)
+		if a1.(int8) < b1.(int8) {
+			return Less
 		}
-		return a1.(int8) > b1.(int8)
+		return Greater
 	case reflect.Int16:
-		if cmp.Asc {
-			return a1.(int16) < b1.(int16)
+		if a1.(int16) < b1.(int16) {
+			return Less
 		}
-		return a1.(int16) > b1.(int16)
+		return Greater
 	case reflect.Int32:
-		if cmp.Asc {
-			return a1.(int32) < b1.(int32)
+		if a1.(int32) < b1.(int32) {
+			return Less
 		}
-		return a1.(int32) > b1.(int32)
+		return Greater
 	case reflect.Int64:
-		if cmp.Asc {
-			return a1.(int64) < b1.(int64)
+		if a1.(int64) < b1.(int64) {
+			return Less
 		}
-		return a1.(int64) > b1.(int64)
+		return Greater
 	case reflect.Uint:
-		if cmp.Asc {
-			return a1.(uint) < b1.(uint)
+		if a1.(uint) < b1.(uint) {
+			return Less
 		}
-		return a1.(uint) > b1.(uint)
+		return Greater
 	case reflect.Uint8:
-		if cmp.Asc {
-			return a1.(uint8) < b1.(uint8)
+		if a1.(uint8) < b1.(uint8) {
+			return Less
 		}
-		return a1.(uint8) > b1.(uint8)
+		return Greater
 	case reflect.Uint16:
-		if cmp.Asc {
-			return a1.(uint16) < b1.(uint16)
+		if a1.(uint16) < b1.(uint16) {
+			return Less
 		}
-		return a1.(uint16) > b1.(uint16)
+		return Greater
 	case reflect.Uint32:
-		if cmp.Asc {
-			return a1.(uint32) < b1.(uint32)
+		if a1.(uint32) < b1.(uint32) {
+			return Less
 		}
-		return a1.(uint32) > b1.(uint32)
+		return Greater
 	case reflect.Uint64:
-		if cmp.Asc {
-			return a1.(uint64) < b1.(uint64)
+		if a1.(uint64) < b1.(uint64) {
+			return Less
 		}
-		return a1.(uint64) > b1.(uint64)
+		return Greater
 	case reflect.String:
-		if cmp.Asc {
-			return a1.(string) < b1.(string)
+		if a1.(string) < b1.(string) {
+			return Less
 		}
-		return a1.(string) > b1.(string)
+		return Greater
 	case reflect.Float32:
-		if cmp.Asc {
-			return a1.(float32) < b1.(float32)
+		if a1.(float32) < b1.(float32) {
+			return Less
 		}
-		return a1.(float32) > b1.(float32)
+		return Greater
 	case reflect.Float64:
-		if cmp.Asc {
-			return a1.(float64) < b1.(float64)
+		if a1.(float64) < b1.(float64) {
+			return Less
 		}
-		return a1.(float64) > b1.(float64)
-
+		return Greater
 	default:
-		panic(fmt.Sprintf("cannot compare %s !\n", kind))
+		panic("cannot compare!")
 	}
+
+}
+
+func (cmp *SimpleTypeComparator) Cmp(a int, b int) bool {
+	a1 := cmp.Data[a]
+	b1 := cmp.Data[b]
+	return BasicCompare(a1, b1) > Equal
 }
 func (cmp *SimpleTypeComparator) Len() int { ; return len(cmp.Data) }
 func (cmp *SimpleTypeComparator) Swap(a int, b int) {

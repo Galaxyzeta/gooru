@@ -64,10 +64,10 @@ func (ctx *AutowireContainer) populate(beanName string) string {
 	if bean.visit == false && bean.fin == false && bean.dep != nil {
 		bean.visit = true
 		fieldNum := bean.reflectedValue.Elem().NumField()
-		fieldType := bean.reflectedValue.Elem().Type()
+		beanType := bean.reflectedValue.Elem().Type()
 		for i := 0; i < fieldNum; i++ {
 			fieldValue := bean.reflectedValue.Elem().Field(i)
-			fieldName := fieldType.Field(i).Name
+			fieldName := beanType.Field(i).Name
 			if bean.dep[fieldName] != "" {
 				injectBean := ctx.beanMap[bean.dep[fieldName]]
 				fieldValue.Set(injectBean.reflectedValue)

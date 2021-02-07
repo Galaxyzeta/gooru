@@ -1,7 +1,9 @@
 package algo
 
+import "galaxyzeta.com/algo/compare"
+
 // InsertionSort is kinda primitive sort. O(n^2).
-func InsertionSort(arr ISortable, start int, end int) {
+func InsertionSort(arr compare.ISortable, start int, end int) {
 	for i := start + 1; i <= end; i++ {
 		for j := i; j > 0 && arr.Cmp(j, j-1); j-- {
 			arr.Swap(j, j-1)
@@ -10,7 +12,7 @@ func InsertionSort(arr ISortable, start int, end int) {
 }
 
 // QuickSort is an advanced sorting technique with divide-and-conquer mechanism. O(n * log(n)) for average.
-func QuickSort(arr ISortable, start int, end int) {
+func QuickSort(arr compare.ISortable, start int, end int) {
 	if start >= end {
 		return
 	}
