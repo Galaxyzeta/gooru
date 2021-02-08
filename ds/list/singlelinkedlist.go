@@ -1,25 +1,27 @@
 package list
 
-// ElemType alias for any types.
-type ElemType interface{}
-
 // Node of a linked list.
 type Node struct {
-	val  ElemType
+	val  interface{}
 	next *Node
 }
 
 // LinkedListIterator represents the process of an iteration.
 type LinkedListIterator struct {
-	node *Node
-	prev *Node
-	li   *SingleLinkedList
+	node         *Node
+	prev         *Node
+	li           *SingleLinkedList
+	last         *Node
+	continuation *Node
+	at           int
 }
 
 // SingleLinkedList represents a singly link of nodes.
 //
 // Use this as Stack or Queue is much faster than the list
 // provided by official.
+//
+// Use this as Queue performs almost the same as channel.
 //
 // Stack: top <------- bottom
 //
@@ -30,14 +32,14 @@ type SingleLinkedList struct {
 	len  int
 }
 
-// NewSinglyLinkedList : Initialize linked list, return a dummy head.
-func NewSinglyLinkedList() *SingleLinkedList {
+// NewSingleLinkedList : Initialize linked list, return a dummy head.
+func NewSingleLinkedList() *SingleLinkedList {
 	node := &Node{next: nil, val: -255}
 	return &SingleLinkedList{tail: node, head: node, len: 0}
 }
 
 // AddLast : Add a node to the last of the given linkedlist.
-func (list *SingleLinkedList) AddLast(val ElemType) {
+func (list *SingleLinkedList) AddLast(val interface{}) {
 	list.tail.next = &Node{val: val, next: nil}
 	list.tail = list.tail.next
 	list.len++
@@ -46,7 +48,7 @@ func (list *SingleLinkedList) AddLast(val ElemType) {
 // RemoveLast : Remove last node of the linked list.
 //
 // Should be careful when calling this because it's SLOW.
-func (list *SingleLinkedList) RemoveLast() ElemType {
+func (list *SingleLinkedList) RemoveLast() interface{} {
 	cur := list.head.next
 	prev := list.head
 	for cur != list.tail {
@@ -62,8 +64,8 @@ func (list *SingleLinkedList) RemoveLast() ElemType {
 }
 
 // RemoveAt removes elem at pos.
-func (list *SingleLinkedList) RemoveAt(pos int) ElemType {
-	if pos >= list.len {
+func (list *SingleLinkedList) RemoveAt(pos int) interface{} {
+	if pos >= list.len || pos < 0 {
 		panic("cannot remove. index out of range")
 	} else if pos == list.len-1 {
 		return list.RemoveLast()
@@ -82,7 +84,7 @@ func (list *SingleLinkedList) RemoveAt(pos int) ElemType {
 }
 
 // Add elem at any position.
-func (list *SingleLinkedList) Add(i int, elem ElemType) {
+func (list *SingleLinkedList) Add(i int, elem interface{}) {
 	if i > list.len {
 		panic("cannot insert because i > list.len")
 	} else if i == list.len {
@@ -100,7 +102,7 @@ func (list *SingleLinkedList) Add(i int, elem ElemType) {
 }
 
 // AddFirst : Add the node after head node.
-func (list *SingleLinkedList) AddFirst(val ElemType) {
+func (list *SingleLinkedList) AddFirst(val interface{}) {
 	tmp := list.head.next
 	list.head.next = newNode(val, tmp)
 	if tmp == nil {
@@ -110,7 +112,7 @@ func (list *SingleLinkedList) AddFirst(val ElemType) {
 }
 
 // RemoveFirst : Remove the first node.
-func (list *SingleLinkedList) RemoveFirst() ElemType {
+func (list *SingleLinkedList) RemoveFirst() interface{} {
 	tmp := list.head.next
 	if tmp == nil {
 		panic("cannot remove first. list is empty.")
@@ -126,7 +128,7 @@ func (list *SingleLinkedList) RemoveFirst() ElemType {
 }
 
 // IndexOf : Find the node with given value
-func (list *SingleLinkedList) IndexOf(target ElemType) *Node {
+func (list *SingleLinkedList) IndexOf(target interface{}) *Node {
 	cur := list.head.next
 	for cur != nil {
 		if cur.val == target {
@@ -152,7 +154,7 @@ func (list *SingleLinkedList) Reverse() {
 }
 
 // Traverse : Pass every node of the given list to the consumer function.
-func (list *SingleLinkedList) Traverse(fn func(i ElemType)) {
+func (list *SingleLinkedList) Traverse(fn func(i interface{})) {
 	cur := list.head.next
 	for cur != nil {
 		fn(cur)
@@ -166,7 +168,7 @@ func (list *SingleLinkedList) Size() int {
 }
 
 // Get pos i. Zero based.
-func (list *SingleLinkedList) Get(i int) ElemType {
+func (list *SingleLinkedList) Get(i int) interface{} {
 	if i >= list.len {
 		panic("list access out of range")
 	}
@@ -188,29 +190,29 @@ func (list *SingleLinkedList) IsEmpty() bool {
 // ==== STACK IMPLEMENTATION ====
 
 // Push is an alias for AddFirst.
-func (list *SingleLinkedList) Push(elem ElemType) {
+func (list *SingleLinkedList) Push(elem interface{}) {
 	list.AddFirst(elem)
 }
 
 // Pop is an alias for RemoveFirst.
-func (list *SingleLinkedList) Pop() ElemType {
+func (list *SingleLinkedList) Pop() interface{} {
 	return list.RemoveFirst()
 }
 
 // Peek is an alias for get(0).
-func (list *SingleLinkedList) Peek() ElemType {
+func (list *SingleLinkedList) Peek() interface{} {
 	return list.Get(0)
 }
 
 // ==== QUEUE IMPLEMENTATION ====
 
 // Offer inserts an elem to the tail.
-func (list *SingleLinkedList) Offer(elem ElemType) {
+func (list *SingleLinkedList) Offer(elem interface{}) {
 	list.AddLast(elem)
 }
 
 // Poll removes the first elem in the list.
-func (list *SingleLinkedList) Poll() ElemType {
+func (list *SingleLinkedList) Poll() interface{} {
 	return list.RemoveFirst()
 }
 
@@ -218,13 +220,23 @@ func (list *SingleLinkedList) Poll() ElemType {
 
 // Iterator returns an implementation of Iterator.
 func (list *SingleLinkedList) Iterator() *LinkedListIterator {
-	return &LinkedListIterator{node: list.head, prev: list.head, li: list}
+	return &LinkedListIterator{node: list.head, prev: list.head, li: list, at: -1}
 }
 
 // Next progress through the iteration.
-func (iterator *LinkedListIterator) Next() ElemType {
-	iterator.prev = iterator.node
-	iterator.node = iterator.node.next
+func (iterator *LinkedListIterator) Next() interface{} {
+	iterator.last = nil
+	if iterator.at+1 >= iterator.li.len {
+		panic("Cannot operate. Iteration has already been completed!")
+	}
+	if iterator.continuation != nil {
+		iterator.node = iterator.continuation
+	} else {
+		iterator.prev = iterator.node
+		iterator.node = iterator.node.next
+	}
+	iterator.at++
+	iterator.last = iterator.node
 	return iterator.node.val
 }
 
@@ -234,22 +246,24 @@ func (iterator *LinkedListIterator) HasNext() bool {
 }
 
 // Remove removes current node.
-func (iterator *LinkedListIterator) Remove() ElemType {
-
-	if iterator.li.head == iterator.node {
-		// Initial condition.
-		iterator.node = iterator.node.next
+func (iterator *LinkedListIterator) Remove() interface{} {
+	if iterator.at >= iterator.li.len {
+		panic("cannot iterate. iteration has already completed.")
 	}
-
-	ret := iterator.node
+	if iterator.last == nil {
+		panic("must call iterator.next() before you can use remove() !")
+	}
+	ret := iterator.last
 	if ret == iterator.li.tail {
 		iterator.li.tail = iterator.prev
 	}
-	iterator.node = ret.next
-	iterator.prev.next = ret.next
+	iterator.continuation = iterator.last.next
+	iterator.prev.next = iterator.continuation
 	iterator.li.len--
+	iterator.at--
 	retval := ret.val
 	ret.free()
+	iterator.last = nil
 	return retval
 }
 
@@ -260,6 +274,6 @@ func (t *Node) free() {
 	t.val = nil
 }
 
-func newNode(elem ElemType, next *Node) *Node {
+func newNode(elem interface{}, next *Node) *Node {
 	return &Node{val: elem, next: next}
 }

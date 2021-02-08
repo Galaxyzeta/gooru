@@ -19,7 +19,7 @@ type Node struct {
 // HashMap represents an auto-resized map, hash collision can be handled with linkedlist.
 type HashMap struct {
 	data       []*Node
-	len        int
+	size       int
 	cap        int
 	loadFactor float32
 	mu         *sync.Mutex
@@ -42,7 +42,7 @@ func (h *HashMap) Cap() int {
 
 // Size returns item count in hashmap.
 func (h *HashMap) Size() int {
-	return h.len
+	return h.size
 }
 
 // Put an elem into the hashmap.
@@ -52,7 +52,7 @@ func (h *HashMap) Put(key interface{}, val interface{}) {
 	node := &Node{key: key, val: val}
 	if h.data[pos] == nil {
 		h.data[pos] = node
-		h.len++
+		h.size++
 	} else {
 		// Insert at head if hash collision.
 		current := h.data[pos]
@@ -67,7 +67,7 @@ func (h *HashMap) Put(key interface{}, val interface{}) {
 		current.next = node
 	}
 
-	if float32(h.len) >= float32(h.cap)*h.loadFactor {
+	if float32(h.size) >= float32(h.cap)*h.loadFactor {
 		// Try to resize
 		h.resize()
 	}
@@ -98,7 +98,7 @@ func (h *HashMap) Delete(key interface{}) (*Node, bool) {
 	if current.key == key {
 		ret = current
 		h.data[pos] = current.next
-		h.len--
+		h.size--
 		return ret, false
 	}
 	// else, deleta other
@@ -107,7 +107,7 @@ func (h *HashMap) Delete(key interface{}) (*Node, bool) {
 		if current.key == key {
 			ret = current
 			prev.next = current.next
-			h.len--
+			h.size--
 			return ret, true
 		}
 		prev = current

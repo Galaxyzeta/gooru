@@ -1,8 +1,8 @@
 # Gooru
 
-Gooru (Guru) 用于存放无聊程序员 Galaxyzeta 造的 golang 轮子
+Gooru (Guru) 用于存放无聊程序员 Galaxyzeta 造的 golang 轮子。欢迎找出各种 bug 或提交新轮子！
 
-Gooru is a scratch book. It intends to hold any Golang stuff written by boring programmer Galaxyzeta.
+Gooru is a playground. It intends to hold any Golang stuff written by boring programmer Galaxyzeta. Feel free to propose issues and make contributions !
 
 内容简介：
 - algo：算法
@@ -23,13 +23,15 @@ Gooru is a scratch book. It intends to hold any Golang stuff written by boring p
 - ds：数据结构包
 	- list
 		- singlelinkedlist：单向线程不安全链表。可用作栈或队列，性能比系统提供的 list 要好。
+		- doublelinkedlist：双向线程不安全链表。
 		- list_interface：提供了`List` `Stack` `Queue` 的接口定义。
 	- map
 		- hashmap：二次封装的，线程不安全的 `map`。
 		- map：提供 `Map` 接口定义。
 		- safe_hashmap：通过互斥锁实现的线程安全 `map`，性能比 `sync.Map` 略差。
+		- lru: 提供基于 `LRU` 淘汰策略的缓存 `map`。
 	- tree
-		- bst：二叉搜索树，线程不安全。
+		- bst：二叉搜索树，线程不安全，提供了基于 bst 的 `BSTMap`，保证插入元素的有序性。
 	- deprecated：
 		- hashmap：手动实现散列表，使用链地址法解决哈希冲突。性能不如 `map`。
 - dp：设计模式。
@@ -46,6 +48,4 @@ Gooru is a scratch book. It intends to hold any Golang stuff written by boring p
 
 一些大胆想法：
 - 实现一个 Stream 操纵任何切片进行变形。
-- 手撕 Hashmap
-- 实现 LRUCache
 - 把 python enumerate 和 zip 等函数抄过来

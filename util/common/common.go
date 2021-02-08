@@ -12,12 +12,12 @@ func Predicate(a interface{}, b interface{}) bool {
 	return false
 }
 
-// CondExpEq is a short hand for a == b? c : d.
-func CondExpEq(a interface{}, b interface{}, eqret interface{}, neqret interface{}) interface{} {
-	if a == b {
-		return eqret
+// MaxInt returns the bigger one between a and b.
+func MaxInt(a int, b int) int {
+	if a > b {
+		return a
 	}
-	return neqret
+	return b
 }
 
 // Stoi convert any slice into []interface{}

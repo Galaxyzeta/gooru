@@ -1,4 +1,4 @@
-package list_test
+package testds
 
 import (
 	"container/list"
@@ -14,7 +14,7 @@ const iteration = 10000
 var bm *benchmark.BenchMark = &benchmark.BenchMark{}
 
 func TestMyLinkedList(t *testing.T) {
-	li := ds.NewSinglyLinkedList()
+	li := ds.NewDoubleLinkedList()
 	for i := 0; i < 1; i++ {
 		li.AddLast(1)
 		li.AddLast(2)
@@ -42,11 +42,17 @@ func TestMyLinkedList(t *testing.T) {
 		assert.ThrowsPanic(func() { iter.Next() })
 		assert.ThrowsPanic(func() { iter.Remove() })
 		iter = li.Iterator()
+		iter.Next()
 		assert.EQ(iter.Remove(), 0)
+		iter.Next()
 		assert.EQ(iter.Remove(), -1)
+		iter.Next()
 		assert.EQ(iter.Remove(), 1)
+		iter.Next()
 		assert.EQ(iter.Remove(), 2)
+		iter.Next()
 		assert.EQ(iter.Remove(), 3)
+		iter.Next()
 		assert.EQ(iter.Remove(), 4)
 		assert.ThrowsPanic(func() { iter.Remove() })
 		assert.EQ(li.Size(), 0)
@@ -58,6 +64,7 @@ func TestMyLinkedList(t *testing.T) {
 		li.AddLast(3)
 		li.AddLast(4)
 
+		assert.EQ(li.Size(), 6)
 		li.RemoveFirst() // H - -1 - 1 - 2 - 3 - 4
 		assert.EQ(li.Get(0), -1)
 		li.RemoveLast() // H - -1 - 1 - 2 - 3
@@ -97,21 +104,22 @@ func TestMyLinkedList(t *testing.T) {
 		assert.EQ(li.Poll(), 3)
 		assert.ThrowsPanic(func() { li.Poll() })
 		assert.EQ(li.Size(), 0)
+
 	}
 
 }
 
 func TestImplmentation(t *testing.T) {
-	var _ ds.List = ds.NewSinglyLinkedList()
-	var _ ds.Queue = ds.NewSinglyLinkedList()
-	var _ ds.Stack = ds.NewSinglyLinkedList()
-	var _ ds.Iterator = ds.NewSinglyLinkedList().Iterator()
+	var _ ds.List = ds.NewSingleLinkedList()
+	var _ ds.Queue = ds.NewSingleLinkedList()
+	var _ ds.Stack = ds.NewSingleLinkedList()
+	var _ ds.Iterator = ds.NewSingleLinkedList().Iterator()
 
 }
 
 func BenchmarkMyLinkedList(b *testing.B) {
 	// MyLinkedList performs better.
-	li := ds.NewSinglyLinkedList()
+	li := ds.NewSingleLinkedList()
 	for i := 0; i < iteration; i++ {
 		li.AddLast(1)
 	}
@@ -125,4 +133,28 @@ func BenchmarkSystemLinkedList(b *testing.B) {
 		li.PushBack(1)
 	}
 	assert.EQ(li.Len(), iteration)
+}
+
+func BenchmarkChanQueue(b *testing.B) {
+	ch := make(chan int, 1000)
+	b.StartTimer()
+	for i := 0; i < 1000; i++ {
+		ch <- i
+	}
+	for i := 0; i < 1000; i++ {
+		<-ch
+	}
+	b.StopTimer()
+}
+
+func BenchmarkMyLinkedListAsQueue(b *testing.B) {
+	var q ds.Queue = ds.NewSingleLinkedList()
+	b.StartTimer()
+	for i := 0; i < 1000; i++ {
+		q.Offer(i)
+	}
+	for i := 0; i < 1000; i++ {
+		q.Poll()
+	}
+	b.StopTimer()
 }

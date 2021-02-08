@@ -2,32 +2,32 @@ package list
 
 // List is an interface defines common behaviors of a list.
 type List interface {
-	Get(i int) ElemType
-	RemoveAt(i int) ElemType
-	Add(i int, elem ElemType)
+	Get(i int) interface{}
+	RemoveAt(i int) interface{}
+	Add(i int, elem interface{})
 	Size() int
 }
 
 // Stack is an interface represents a first in, last out list.
 type Stack interface {
-	Push(elem ElemType)
-	Pop() ElemType
-	Peek() ElemType
+	Push(elem interface{})
+	Pop() interface{}
+	Peek() interface{}
 	IsEmpty() bool
 	Size() int
 }
 
 // Queue is an interface represents a first in, first out list.
 type Queue interface {
-	Offer(elem ElemType)
-	Poll() ElemType
+	Offer(elem interface{})
+	Poll() interface{}
 	IsEmpty() bool
 	Size() int
 }
 
 // Iterator is an interface represents a process of iteration.
 type Iterator interface {
-	Next() ElemType
+	Next() interface{}
 	HasNext() bool
-	Remove() ElemType
+	Remove() interface{}
 }

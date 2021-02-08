@@ -1,12 +1,14 @@
-package test
+package testds
 
 import (
 	"fmt"
 	"sync"
 	"testing"
 
+	"galaxyzeta.com/algo/compare"
 	dep "galaxyzeta.com/ds/deprecated/hashmap"
 	hashmap "galaxyzeta.com/ds/map"
+	"galaxyzeta.com/ds/tree"
 
 	"galaxyzeta.com/util/assert"
 )
@@ -66,4 +68,8 @@ func BenchmarkSyncHashMap(b *testing.B) {
 		// v, _ := h.Load(k)
 		// assert.EQ(v, i)
 	}
+}
+
+func TestInterfaceImplementation(t *testing.T) {
+	var _ hashmap.Map = tree.NewBST(compare.BasicCompare)
 }

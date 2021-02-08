@@ -1,6 +1,6 @@
 package algo
 
-import "galaxyzeta.com/algo/compare"
+import "../algo/compare"
 
 // InsertionSort is kinda primitive sort. O(n^2).
 func InsertionSort(arr compare.ISortable, start int, end int) {

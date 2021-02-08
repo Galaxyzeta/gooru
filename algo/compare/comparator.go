@@ -133,7 +133,15 @@ var BasicCompare = func(a1 interface{}, b1 interface{}) int {
 	default:
 		panic("cannot compare!")
 	}
+}
 
+// BasicCompareDescend provides reversed comparison.
+var BasicCompareDescend = func(a1 interface{}, a2 interface{}) int {
+	ret := BasicCompare(a1, a2)
+	if ret > 0 {
+		return Less
+	}
+	return Greater
 }
 
 func (cmp *SimpleTypeComparator) Cmp(a int, b int) bool {
