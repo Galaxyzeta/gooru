@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"galaxyzeta.com/ioc"
+	"galaxyzeta.com/framework/ioc"
 )
 
 // A test

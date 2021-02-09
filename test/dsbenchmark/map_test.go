@@ -27,6 +27,29 @@ func TestBasic(t *testing.T) {
 	assert.EQ(h.Get("kcuf"), nil)
 }
 
+func TestSystemMap(t *testing.T) {
+	m := hashmap.NewHashMap()
+	m.Put(1, 1)
+	m.Put(1, 2)
+	assert.EQ(m.Get(1), 2)
+	assert.EQ(m.ContainsKey(1), true)
+	assert.EQ(m.ContainsKey(2), false)
+	assert.EQ(m.Get(2), nil)
+	assert.EQ(m.Size(), 1)
+	m.Delete(1)
+	assert.EQ(m.Size(), 0)
+}
+
+func TestSystemSet(t *testing.T) {
+	m := hashmap.NewHashSet()
+	m.Put(1)
+	assert.EQ(m.Contains(1), true)
+	assert.EQ(m.Contains(2), false)
+	assert.EQ(m.Size(), 1)
+	m.Delete(1)
+	assert.EQ(m.Size(), 0)
+}
+
 func BenchmarkResize(b *testing.B) {
 	h := dep.New(16)
 	for i := 0; i < 1000; i++ {
@@ -46,7 +69,7 @@ func BenchmarkOrigMap(b *testing.B) {
 }
 
 func BenchmarkMutexHashMap(b *testing.B) {
-	h := hashmap.NewSafeHashMap()
+	h := dep.NewSafeHashMap()
 	for i := 0; i < 1000; i++ {
 		go func(i int) {
 			k := fmt.Sprintf("a%dd", i)
@@ -72,4 +95,6 @@ func BenchmarkSyncHashMap(b *testing.B) {
 
 func TestInterfaceImplementation(t *testing.T) {
 	var _ hashmap.Map = tree.NewBST(compare.BasicCompare)
+	var _ hashmap.Set = hashmap.NewHashSet()
+	var _ hashmap.Map = dep.NewSafeHashMap()
 }

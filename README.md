@@ -35,9 +35,13 @@ Gooru is a playground. It intends to hold any Golang stuff written by boring pro
 	- deprecated：
 		- hashmap：手动实现散列表，使用链地址法解决哈希冲突。性能不如 `map`。
 - dp：设计模式。
-- ioc：简陋的依赖注入框架，可以循环依赖。
+
 - logger：日志打印。
-- server：各种网络模型的尝试。
+- framework：手撸各种框架。
+	- server：web 服务器
+		- simple：手动实现的 web 服务器。简陋。
+		- gecko：模仿 Gin 和 Echo 做的 web 服务器，使用路由树。
+	- ioc：简陋的依赖注入框架，可以循环依赖。
 - test：滚轮子测试。
 - tutorial：入门 golang。
 - util：工具。

@@ -3,7 +3,6 @@ package hashmap
 // HashMap is a wrapper for original map.
 type HashMap struct {
 	data map[interface{}]interface{}
-	size int
 }
 
 // NewHashMap return a map object of generic types.
@@ -14,7 +13,6 @@ func NewHashMap() *HashMap {
 // Put an elem into the map.
 func (h *HashMap) Put(k, v interface{}) {
 	h.data[k] = v
-	h.size++
 }
 
 // Delete an elem from the map
@@ -24,11 +22,16 @@ func (h *HashMap) Delete(k interface{}) {
 
 // Get val from the map.
 func (h *HashMap) Get(k interface{}) interface{} {
-	h.size--
 	return h.data[k]
 }
 
-// Len returns map size.
-func (h *HashMap) Len() int {
-	return h.size
+// Size returns map size.
+func (h *HashMap) Size() int {
+	return len(h.data)
+}
+
+// ContainsKey indicate whether the key is in the map or not.
+func (h *HashMap) ContainsKey(k interface{}) bool {
+	_, ok := h.data[k]
+	return ok
 }

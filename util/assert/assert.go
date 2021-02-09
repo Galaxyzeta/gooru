@@ -15,7 +15,7 @@ func NEQ(actual interface{}, expect interface{}) {
 	if actual != expect {
 		return
 	}
-	panic(fmt.Sprintf("expect %v but actual is %v", expect, actual))
+	panic(fmt.Sprintf("expect NOT %v but actual is %v", expect, actual))
 }
 
 // ThrowsPanic asserts a panic to be thrown.

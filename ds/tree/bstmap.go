@@ -97,6 +97,14 @@ func (bst *BSTMap) Height() int {
 	return height(bst.tree)
 }
 
+// ContainsKey indicate whether the BSTMap contains certain key.
+func (bst *BSTMap) ContainsKey(k interface{}) bool {
+	if bst.Get(k) == nil {
+		return false
+	}
+	return true
+}
+
 func height(n *TNode) int {
 	if n == nil {
 		return 0

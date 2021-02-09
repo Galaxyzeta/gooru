@@ -6,4 +6,13 @@ type Map interface {
 	Put(k interface{}, v interface{})
 	Size() int
 	Delete(k interface{})
+	ContainsKey(k interface{}) bool
+}
+
+// Set is an interface defining a pool of unique items to be stored.
+type Set interface {
+	Put(v interface{})
+	Size() int
+	Delete(v interface{})
+	Contains(v interface{}) bool
 }

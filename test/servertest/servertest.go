@@ -1,6 +1,6 @@
 package main
 
-import galaxyserver "galaxyzeta.com/server"
+import galaxyserver "galaxyzeta.com/framework/server/simple"
 
 // Pirate version of Echo framework
 func main() {

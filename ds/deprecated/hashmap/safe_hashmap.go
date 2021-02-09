@@ -3,9 +3,10 @@ package hashmap
 import "sync"
 
 // SafeHashMap is a hashmap using mutex for concurrency-safety.
+//
+// Should be DEPRECATED because it's not efficient.
 type SafeHashMap struct {
 	data map[interface{}]interface{}
-	size int
 	mu   *sync.Mutex
 }
 
@@ -18,7 +19,6 @@ func NewSafeHashMap() *SafeHashMap {
 func (h *SafeHashMap) Put(k, v interface{}) {
 	h.mu.Lock()
 	h.data[k] = v
-	h.size++
 	h.mu.Unlock()
 }
 
@@ -40,5 +40,16 @@ func (h *SafeHashMap) Get(k interface{}) interface{} {
 
 // Len returns map size.
 func (h *SafeHashMap) Len() int {
-	return h.size
+	return len(h.data)
+}
+
+// ContainsKey indicate whether the key is in the map or not.
+func (h *SafeHashMap) ContainsKey(k interface{}) bool {
+	_, ok := h.data[k]
+	return ok
+}
+
+// Size returns map size.
+func (h *SafeHashMap) Size() int {
+	return len(h.data)
 }
