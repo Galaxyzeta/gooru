@@ -5,11 +5,11 @@ Gooru (Guru) 用于存放无聊程序员 Galaxyzeta 造的 golang 轮子。欢�
 Gooru is a playground. It intends to hold any Golang stuff written by boring programmer Galaxyzeta. Feel free to propose issues and make contributions !
 
 内容简介：
-- algo：算法
+- algo：算法。
 	- compare：
 		- comparator：比较器，强行实现了任意基本类型的比较，此外还提供一些常用比较函数。
 	- sort：排序算法轮子。
-- concurrency：并发工具包
+- concurrency：并发工具包。
 	- async：异步任务。
 		- delayedjob：使用基于轮询的 `TimerWheel` 完成异步任务。存在性能问题，考虑改写后废弃原版。
 		- intervaljob：基于 `time.Ticker` 完成周期性任务。
@@ -20,20 +20,22 @@ Gooru is a playground. It intends to hold any Golang stuff written by boring pro
 		- aqs：抄了 java AQS，提供了 `IAQS` 接口，用于实现各种同步容器。
 		- reentrantlock：可重入锁，golang 提供的 `mutex` 是不可重入的。
 	- waiter: 对 `WaitGroup` 的二次封装，用于等待若干个函数的执行完毕。
-- ds：数据结构包
+- consistenthash：一致性哈希工具包。
+- ds：数据结构包。
 	- list
 		- singlelinkedlist：单向线程不安全链表。可用作栈或队列，性能比系统提供的 list 要好。
 		- doublelinkedlist：双向线程不安全链表。
 		- list_interface：提供了`List` `Stack` `Queue` 的接口定义。
+		- priority_queue：提供了基于 `interface{}` 的优先队列，实现了 `Queue`。
 	- map
 		- hashmap：二次封装的，线程不安全的 `map`。
 		- map：提供 `Map` 接口定义。
-		- safe_hashmap：通过互斥锁实现的线程安全 `map`，性能比 `sync.Map` 略差。
 		- lru: 提供基于 `LRU` 淘汰策略的缓存 `map`。
 	- tree
 		- bst：二叉搜索树，线程不安全，提供了基于 bst 的 `BSTMap`，保证插入元素的有序性。
-	- deprecated：
+	- deprecated：用于研究数据结构原理，但实现不如系统自带的高效。不推荐使用。
 		- hashmap：手动实现散列表，使用链地址法解决哈希冲突。性能不如 `map`。
+		- safe_hashmap：通过互斥锁实现的线程安全 `map`，性能比 `sync.Map` 略差。
 - dp：设计模式。
 
 - logger：日志打印。
@@ -51,5 +53,5 @@ Gooru is a playground. It intends to hold any Golang stuff written by boring pro
 	- assert：断言工具，断言失败会导致 `panic`。
 
 一些大胆想法：
-- 实现一个 Stream 操纵任何切片进行变形。
-- 把 python enumerate 和 zip 等函数抄过来
+- 实现一个 Stream 操纵任何切片进行变形。因为 golang 的流式编程确实是缺乏。
+- 把 python enumerate 和 zip 等函数抄过来。

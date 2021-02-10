@@ -1,3 +1,9 @@
+// Author: @ Galaxyzeta
+// BioServer is a simple implementation of HttpServer. Including:
+// 1. HttpRequest parsing.
+// 2. HashMap router.
+// 3. HttpResponse parsing.
+
 package galaxyserver
 
 import (

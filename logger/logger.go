@@ -1,5 +1,8 @@
 package logger
 
+// Logger uses Sprintf to log, so it is NOT efficient enough.
+// Please use ZAP as logger framework if you are demanding at logging efficiency !
+
 import (
 	"fmt"
 	"time"

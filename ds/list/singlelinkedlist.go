@@ -216,6 +216,22 @@ func (list *SingleLinkedList) Poll() interface{} {
 	return list.RemoveFirst()
 }
 
+// Front retireves the first elem in the list.
+func (list *SingleLinkedList) Front() interface{} {
+	if list.Size() == 0 {
+		return nil
+	}
+	return list.head.next.val
+}
+
+// Back retrieve the last elem in the list.
+func (list *SingleLinkedList) Back() interface{} {
+	if list.Size() == 0 {
+		return nil
+	}
+	return list.tail.val
+}
+
 // ==== ITERATOR IMPLEMENTATION ====
 
 // Iterator returns an implementation of Iterator.

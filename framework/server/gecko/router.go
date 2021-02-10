@@ -19,8 +19,10 @@ type node struct {
 	wildChildren *node
 	children     map[string]*node
 	handler      []HandlerFunc
+	groups       []*GroupRouter
 }
 
+// HTTPMethod types.
 const (
 	Get = iota
 	Post
@@ -37,20 +39,20 @@ func NewRouter() *Router {
 }
 
 // SearchHandler searches through the router tree, and find handler function if possible.
-func (g *Gecko) SearchHandler(method HTTPMethod, pattern string) (HandlerFunc, map[string]string) {
+func (g *Gecko) SearchHandler(method HTTPMethod, pattern string) (HandlerFunc, ParamMap, []*GroupRouter) {
 	if g.router.root == nil {
-		return nil, nil
+		return nil, nil, nil
 	}
-	ret, params := g.router.root.search(method, pattern)
-	return ret, params
+	return g.router.root.search(method, pattern)
 }
 
-func (r *Router) insert(method HTTPMethod, pat string, handler HandlerFunc) {
+func (r *Router) insert(method HTTPMethod, pat string, handler HandlerFunc, gr *GroupRouter) {
 	if r.root == nil {
 		// lazy init
 		r.root = newNode("/", "/", 0, nil, false)
 	}
-	r.root.insert(method, pat, pat, handler)
+	pat = gr.prefix + pat // add GroupRouter's prefix
+	r.root.insert(method, pat, pat, handler, gr)
 }
 
 func newNode(pattern string, part string, method HTTPMethod, handler HandlerFunc, isWild bool) *node {
@@ -59,17 +61,19 @@ func newNode(pattern string, part string, method HTTPMethod, handler HandlerFunc
 		children: make(map[string]*node),
 		handler:  make([]HandlerFunc, 8),
 		isWild:   isWild,
+		groups:   make([]*GroupRouter, 0),
 	}
 	ret.handler[method] = handler
 	return ret
 }
 
-func (r *node) insert(method HTTPMethod, pat string, cpat string, handler HandlerFunc) {
+func (r *node) insert(method HTTPMethod, pat string, cpat string, handler HandlerFunc, gr *GroupRouter) {
 	cpatlen := len(cpat)
 	if cpatlen == 0 {
 		// Already finished. Set method.
 		r.handler[method] = handler
 		r.pattern = pat
+		r.groups = append(r.groups, gr)
 		return
 	}
 	old := r
@@ -102,19 +106,19 @@ func (r *node) insert(method HTTPMethod, pat string, cpat string, handler Handle
 		} else {
 			old.children[part] = n
 		}
-		n.insert(method, pat, nextCpat, handler)
+		n.insert(method, pat, nextCpat, handler, gr)
 		return
 	}
 	// Already Exist.
-	next.insert(method, pat, nextCpat, handler)
+	next.insert(method, pat, nextCpat, handler, gr)
 	return
 }
 
-func (r *node) search(method HTTPMethod, pattern string) (HandlerFunc, map[string]string) {
+func (r *node) search(method HTTPMethod, pattern string) (HandlerFunc, ParamMap, []*GroupRouter) {
 	var split int = 0
 	var record int = 0
 	prev := r
-	wildParams := make(map[string]string)
+	wildParams := make(ParamMap)
 	for {
 		split++ // Skip the next '/' delimiter.
 		for ; split < len(pattern) && pattern[split] != '/'; split++ {
@@ -125,27 +129,28 @@ func (r *node) search(method HTTPMethod, pattern string) (HandlerFunc, map[strin
 			// Priority 2: go wild.
 			if prev.wildChildren != nil {
 				// Record wild params.
-				wildParams[prev.wildChildren.part[2:]] = cpart[1:] // get rid of '/', ':', '*' symbol
 				switch prev.wildChildren.part[1] {
 				case ':':
 					// If :, go wild.
+					wildParams[prev.wildChildren.part[2:]] = cpart[1:] // get rid of '/', ':', '*' symbol
 					prev = prev.wildChildren
 				case '*':
 					// If *, stop matching and return result immediately.
-					return prev.wildChildren.handler[method], wildParams
+					wildParams[prev.wildChildren.part[2:]] = pattern[1:] // Not cpart. Need to include all the rest of the string.
+					return prev.wildChildren.handler[method], wildParams, prev.wildChildren.groups
 				default:
 					panic("Unexpected route search result.")
 				}
 
 			} else {
-				return nil, nil // Not match.
+				return nil, nil, nil // Not match.
 			}
 		} else {
 			prev = prev.children[cpart]
 		}
 		if split >= len(pattern) {
 			// Search end.
-			return prev.handler[method], wildParams
+			return prev.handler[method], wildParams, prev.groups
 		}
 		record = split
 	}

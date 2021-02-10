@@ -204,6 +204,22 @@ func (list *DoubleLinkedList) Poll() interface{} {
 	return list.RemoveFirst()
 }
 
+// Front retireves the first elem in the list.
+func (list *DoubleLinkedList) Front() interface{} {
+	if list.Size() == 0 {
+		return nil
+	}
+	return list.head.next.val
+}
+
+// End retrieve the last elem in the list.
+func (list *DoubleLinkedList) End() interface{} {
+	if list.Size() == 0 {
+		return nil
+	}
+	return list.tail.val
+}
+
 // ==== ITERATOR IMPLEMENTATION ====
 
 // Iterator returns an implementation of Iterator.

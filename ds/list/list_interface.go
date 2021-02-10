@@ -23,6 +23,8 @@ type Queue interface {
 	Poll() interface{}
 	IsEmpty() bool
 	Size() int
+	Front() interface{}
+	Back() interface{}
 }
 
 // Iterator is an interface represents a process of iteration.
