@@ -44,6 +44,8 @@ Gooru is a playground. It intends to hold any Golang stuff written by boring pro
 		- simple：手动实现的 web 服务器。简陋。
 		- gecko：模仿 Gin 和 Echo 做的 web 服务器，使用路由树。
 	- ioc：简陋的依赖注入框架，可以循环依赖。
+	- cache：缓存框架
+    	- gocaching：一个非常简单的分布式缓存框架，参考 `GroupCache`。重在学习一致性哈希。
 - test：滚轮子测试。
 - tutorial：入门 golang。
 - util：工具。

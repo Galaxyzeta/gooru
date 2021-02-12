@@ -135,6 +135,7 @@ func (d *DNode) remove() interface{} {
 }
 
 // RemoveNode is a private version of removing a specific DNoda, adjusting list tail as well.
+// Returns node's val.
 func (list *DoubleLinkedList) RemoveNode(d *DNode) interface{} {
 	ret := d.remove()
 	list.tail = list.head.prev

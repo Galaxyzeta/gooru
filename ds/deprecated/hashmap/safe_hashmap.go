@@ -23,10 +23,12 @@ func (h *SafeHashMap) Put(k, v interface{}) {
 }
 
 // Delete an elem from the map
-func (h *SafeHashMap) Delete(k interface{}) {
+func (h *SafeHashMap) Delete(k interface{}) interface{} {
+	val := h.data[k]
 	h.mu.Lock()
 	delete(h.data, k)
 	h.mu.Unlock()
+	return val
 }
 
 // Get val from the map.

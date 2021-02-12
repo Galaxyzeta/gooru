@@ -30,34 +30,19 @@ func (bst *BSTMap) Put(key interface{}, val interface{}) {
 		bst.size++
 	} else {
 		// binary search descend
-		current := bst.tree
-		prev := current
-		flag := left
-		for current != nil {
-			res := bst.cmpFunc(current.key, key)
-			switch res {
-			case compare.Less: // val > current.val
-				prev = current
-				current = current.rchild
-				flag = right
-			case compare.Greater: // val <= current.val
-				prev = current
-				current = current.lchild
-				flag = left
-			case compare.Equal:
-				// modify value directly.
-				current.val = val
-				return
-			}
+		prev, current, _ := bst.keySearch(key)
+		if current != nil {
+			// already exists, update its value.
+			current.val = val
+			return
 		}
-		if flag == left {
+		// not exists, insert new node.
+		if bst.cmpFunc(key, prev.key) == compare.Less {
 			prev.lchild = newNode(key, val)
 			bst.size++
-		} else if flag == right {
+		} else {
 			prev.rchild = newNode(key, val)
 			bst.size++
-		} else {
-			panic("unreachable situation.")
 		}
 	}
 }
@@ -72,19 +57,20 @@ func (bst *BSTMap) Get(key interface{}) interface{} {
 }
 
 // Delete certain key.
-func (bst *BSTMap) Delete(key interface{}) {
+func (bst *BSTMap) Delete(key interface{}) interface{} {
 	prev, current, isleft := bst.keySearch(key)
 	if current == nil {
-		// trying to delete an unexist target.
-		panic("trying to delete an unexisting key.")
-	} else {
-		doDelete(prev, current, bst.cmpFunc, isleft)
-		bst.size--
-		if bst.size == 0 {
-			bst.tree.free()
-			bst.tree = nil
-		}
+		return nil
 	}
+	ret := current.val
+	doDelete(prev, current, bst.cmpFunc, isleft)
+	bst.size--
+	if bst.size == 0 {
+		bst.tree.free()
+		bst.tree = nil
+	}
+	return ret
+
 }
 
 // Size of a BSTMap.

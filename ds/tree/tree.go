@@ -75,13 +75,13 @@ func keySearch(startFrom *TNode, key interface{}, cmpFunc compare.CompareFunc) (
 	flag := true
 	prev = nil
 	for current != nil {
-		res := cmpFunc(current.key, key)
+		res := cmpFunc(key, current.key)
 		switch res {
-		case compare.Less: // val > current.val
+		case compare.Greater: // val > current.val
 			prev = current
 			current = current.rchild
 			flag = false
-		case compare.Greater: // val <= current.val
+		case compare.Less: // val <= current.val
 			prev = current
 			current = current.lchild
 			flag = true
@@ -90,5 +90,5 @@ func keySearch(startFrom *TNode, key interface{}, cmpFunc compare.CompareFunc) (
 			return prev, current, flag
 		}
 	}
-	return nil, nil, false
+	return prev, nil, false
 }

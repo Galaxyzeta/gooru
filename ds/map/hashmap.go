@@ -16,8 +16,10 @@ func (h *HashMap) Put(k, v interface{}) {
 }
 
 // Delete an elem from the map
-func (h *HashMap) Delete(k interface{}) {
+func (h *HashMap) Delete(k interface{}) interface{} {
+	ret := h.data[k]
 	delete(h.data, k)
+	return ret
 }
 
 // Get val from the map.

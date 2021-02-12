@@ -2,6 +2,7 @@ package common
 
 import (
 	"reflect"
+	"strings"
 )
 
 // Predicate is a short hand for judging whether a equals b.
@@ -66,4 +67,13 @@ func IsNumeric(kind reflect.Kind) bool {
 		return true
 	}
 	return false
+}
+
+// BuildString builds a string via StringBuilder. More efficient than using + .
+func BuildString(strs ...string) string {
+	sb := strings.Builder{}
+	for _, str := range strs {
+		sb.WriteString(str)
+	}
+	return sb.String()
 }

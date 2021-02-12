@@ -5,7 +5,7 @@ type Map interface {
 	Get(k interface{}) interface{}
 	Put(k interface{}, v interface{})
 	Size() int
-	Delete(k interface{})
+	Delete(k interface{}) interface{}
 	ContainsKey(k interface{}) bool
 }
 

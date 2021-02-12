@@ -40,7 +40,7 @@ func NewLRUCacheWithFunction(capacity int, fn alias.P2Consumer) *LRUCache {
 	return ret
 }
 
-// Get an elem from hashmap. Update its position as well.
+// Get an elem from hashmap. Update its position as well. Return nil if not found.
 func (cache *LRUCache) Get(k interface{}) interface{} {
 	ret, ok := cache.hashmap[k]
 	if ok == false {
@@ -53,11 +53,12 @@ func (cache *LRUCache) Get(k interface{}) interface{} {
 }
 
 // Delete an elem from hashmap.
-func (cache *LRUCache) Delete(k interface{}) {
+func (cache *LRUCache) Delete(k interface{}) interface{} {
 	node := cache.hashmap[k]
-	cache.li.RemoveNode(node)
+	ret := cache.li.RemoveNode(node)
 	delete(cache.hashmap, k)
 	cache.size--
+	return ret
 }
 
 // Put an elem into the cache.
