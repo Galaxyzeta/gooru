@@ -1,6 +1,6 @@
 package tree
 
-import "galaxyzeta.com/algo/compare"
+import "github.com/galaxyzeta/algo/compare"
 
 const (
 	left  = -1

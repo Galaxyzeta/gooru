@@ -3,7 +3,7 @@ package logger_test
 import (
 	"testing"
 
-	"galaxyzeta.com/logger"
+	"github.com/galaxyzeta/logger"
 )
 
 func TestLogger(t *testing.T) {

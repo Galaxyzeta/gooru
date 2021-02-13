@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"galaxyzeta.com/concurrency/async"
-	"galaxyzeta.com/util/assert"
+	"github.com/galaxyzeta/concurrency/async"
+	"github.com/galaxyzeta/util/assert"
 )
 
 func TestDelayedJob(t *testing.T) {

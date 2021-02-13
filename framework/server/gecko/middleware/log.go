@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"galaxyzeta.com/framework/server/gecko"
-	"galaxyzeta.com/logger"
+	"github.com/galaxyzeta/framework/server/gecko"
+	"github.com/galaxyzeta/logger"
 )
 
 // Log incoming request and its URI. This can be used as a middleware test.

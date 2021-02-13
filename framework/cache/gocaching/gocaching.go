@@ -1,10 +1,11 @@
+
 package gocaching
 
 import (
 	"net/http"
 
-	hashmap "galaxyzeta.com/ds/map"
-	"galaxyzeta.com/logger"
+	hashmap "github.com/galaxyzeta/ds/map"
+	"github.com/galaxyzeta/logger"
 )
 
 // GoCaching is a distributed caching server.

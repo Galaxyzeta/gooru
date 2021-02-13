@@ -5,7 +5,7 @@ import (
 
 	sys "container/list"
 
-	"galaxyzeta.com/ds/list"
+	"github.com/galaxyzeta/ds/list"
 )
 
 func BenchmarkDoubleLinkedList(b *testing.B) {

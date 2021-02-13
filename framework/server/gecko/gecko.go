@@ -3,7 +3,7 @@ package gecko
 import (
 	"net/http"
 
-	"galaxyzeta.com/concurrency/waiter"
+	"github.com/galaxyzeta/concurrency/waiter"
 )
 
 // Gecko is an HTTP server framework.

@@ -1,8 +1,8 @@
 package hashmap
 
 import (
-	"galaxyzeta.com/ds/list"
-	"galaxyzeta.com/util/alias"
+	"github.com/galaxyzeta/ds/list"
+	"github.com/galaxyzeta/util/alias"
 )
 
 // LRUCache is a combination of hashmap and linkedlist for lru caching.

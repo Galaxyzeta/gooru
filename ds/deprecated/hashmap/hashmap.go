@@ -6,7 +6,7 @@ package hashmap
 import (
 	"sync"
 
-	"galaxyzeta.com/util/common"
+	"github.com/galaxyzeta/util/common"
 )
 
 // Node represents hashmap node.

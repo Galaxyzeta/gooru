@@ -1,10 +1,10 @@
 package tree
 
 import (
-	"galaxyzeta.com/algo/compare"
-	"galaxyzeta.com/ds/list"
-	"galaxyzeta.com/util/alias"
-	"galaxyzeta.com/util/common"
+	"github.com/galaxyzeta/algo/compare"
+	"github.com/galaxyzeta/ds/list"
+	"github.com/galaxyzeta/util/alias"
+	"github.com/galaxyzeta/util/common"
 )
 
 // BSTMap represents a two-branched tree data structure.

@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"time"
 
-	"galaxyzeta.com/concurrency/singleflight"
-	"galaxyzeta.com/consistenthash"
-	"galaxyzeta.com/logger"
-	"galaxyzeta.com/util/common"
+	"github.com/galaxyzeta/concurrency/singleflight"
+	"github.com/galaxyzeta/consistenthash"
+	"github.com/galaxyzeta/logger"
+	"github.com/galaxyzeta/util/common"
 )
 
 // HandlerFunc works as the handler for http request.
@@ -45,6 +45,7 @@ func (g *GoCaching) RunAPIServer(host string, peers ...string) {
 	// Router register.
 	api.router["/getkey"] = api.getFromRemote
 	// Peers register.
+	
 	for _, peer := range peers {
 		api.peers[peer] = struct{}{}
 		api.c.Add(peer)

@@ -1,8 +1,8 @@
 package synchronizer
 
 import (
-	"galaxyzeta.com/concurrency/goroutine"
-	"galaxyzeta.com/concurrency/spinlock"
+	"github.com/galaxyzeta/concurrency/goroutine"
+	"github.com/galaxyzeta/concurrency/spinlock"
 )
 
 const vacant = -1

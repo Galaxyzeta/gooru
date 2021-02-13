@@ -1,6 +1,6 @@
 package list
 
-import "galaxyzeta.com/algo/compare"
+import "github.com/galaxyzeta/algo/compare"
 
 // PriorityQueue represents heap, which has the ability to keep its top element the biggest / smallest.
 type PriorityQueue struct {
