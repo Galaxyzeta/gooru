@@ -9,6 +9,7 @@ import (
 )
 
 const (
+	noColor   = 0
 	bgBlack   = 30
 	bgRed     = 31
 	bgGreen   = 32
@@ -50,7 +51,7 @@ func (logger *Logger) Disable() {
 
 // Info gives some hint.
 func (logger *Logger) Info(msg string) {
-	logger.doLog("[INFO]", msg, bgWhite, fgBlack)
+	logger.doLog("[INFO]", msg, bgBlue, fgBlack)
 }
 
 // Infof gives some hint with format.
@@ -102,5 +103,5 @@ func (logger *Logger) doLog(label string, msg string, bgcolor int, fgcolor int) 
 	if logger.enable == false {
 		return
 	}
-	fmt.Printf("%c[0;%d;%dm%s\t%d | %s:\t%s%c[0m\n", 0x1B, bgcolor, fgcolor, label, time.Now().Unix(), logger.name, msg, 0x1B)
+	fmt.Printf("%c[0;%dm%s\t%d | %s:\t%s%c[0m\n", 0x1B, bgcolor, label, time.Now().Unix(), logger.name, msg, 0x1B)
 }
