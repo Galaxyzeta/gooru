@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"galaxyzeta.com/concurrency/async"
+	deprecated "galaxyzeta.com/concurrency/deprecated"
 	"galaxyzeta.com/concurrency/semaphore"
 	"galaxyzeta.com/concurrency/spinlock"
 	"galaxyzeta.com/concurrency/synchronizer"
@@ -27,7 +27,7 @@ func main() {
 }
 
 func testDelayJob() {
-	wheel := async.NewTimer(16, 50)
+	wheel := deprecated.NewTimer(16, 50)
 	task1 := func(...interface{}) interface{} {
 		fmt.Println("Hello World")
 		return 1
@@ -42,7 +42,7 @@ func testDelayJob() {
 func testSpinLock() {
 	opt := spinlock.New(10)
 	var condVal interface{} = false
-	wheel := async.NewTimer(16, 5)
+	wheel := deprecated.NewTimer(16, 5)
 	task1 := func(...interface{}) interface{} {
 		condVal = true
 		return nil
@@ -168,8 +168,8 @@ func testChanSem() {
 }
 
 func testInterval() {
-	i := async.NewInterval(1, time.Second, func() { fmt.Println("Hello") })
+	i := deprecated.NewInterval(1, time.Second, func() { fmt.Println("Hello") })
 	i.Start(false)
 	time.Sleep(time.Duration(5) * time.Second)
-	i.Stop()
+	i.Cancel()
 }
