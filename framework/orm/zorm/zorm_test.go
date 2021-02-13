@@ -13,6 +13,6 @@ type user struct {
 
 func TestSchemaParse(t *testing.T) {
 	table := zorm.NewSchema()
-	table.Parse(&user{})
+	table.Parse(&user{}, zorm.DialectMap["mysql"])
 	table.PrintSchema()
 }

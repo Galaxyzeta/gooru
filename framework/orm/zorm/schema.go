@@ -21,7 +21,7 @@ type Schema struct {
 
 // Parse converts an Golang struct into a Schema object.
 // Model should be a pointer.
-func (s *Schema) Parse(model interface{}) {
+func (s *Schema) Parse(model interface{}, d Dialect) {
 	modelType := reflect.Indirect(reflect.ValueOf(model)).Type()
 	fieldNum := modelType.NumField()
 	s.model = model
@@ -29,7 +29,7 @@ func (s *Schema) Parse(model interface{}) {
 		f := modelType.Field(i)
 		injectFieldObject := &field{
 			name:  f.Name,
-			ftype: f.Type.Name(),
+			ftype: d.GolangTypeToDBType(reflect.Indirect(reflect.New(f.Type))),
 		}
 		if v, ok := f.Tag.Lookup("zorm"); ok {
 			injectFieldObject.tag = v
