@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/galaxyzeta/concurrency/singleflight"
-	"github.com/galaxyzeta/consistenthash"
+	"github.com/galaxyzeta/distributed/consistenthash"
 	"github.com/galaxyzeta/logger"
 	"github.com/galaxyzeta/util/common"
 )
@@ -45,7 +45,7 @@ func (g *GoCaching) RunAPIServer(host string, peers ...string) {
 	// Router register.
 	api.router["/getkey"] = api.getFromRemote
 	// Peers register.
-	
+
 	for _, peer := range peers {
 		api.peers[peer] = struct{}{}
 		api.c.Add(peer)

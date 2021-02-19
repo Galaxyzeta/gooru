@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/galaxyzeta/consistenthash"
+	"github.com/galaxyzeta/distributed/consistenthash"
 )
 
 func TestConsistentHash(t *testing.T) {
